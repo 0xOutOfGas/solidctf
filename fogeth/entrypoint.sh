@@ -5,7 +5,8 @@ GETH_DATA_DIR=/data
 GETH_CHAINDATA_DIR=$GETH_DATA_DIR/geth/chaindata
 GETH_KEYSTORE_DIR=$GETH_DATA_DIR/keystore
 
-CHAIN_ID="${CHAIN_ID:-$((RANDOM + 10000))}"
+#CHAIN_ID="${CHAIN_ID:-$((RANDOM + 10000))}"
+CHAIN_ID=19875
 
 [ -f "$GETH_DATA_DIR/alloc-address" ] && ALLOC_ADDRESS_WITHOUT_0X=$(cat "$GETH_DATA_DIR/alloc-address")
 [ ! -d "$GETH_DATA_DIR" ] && mkdir "$GETH_DATA_DIR"
@@ -38,6 +39,7 @@ exec geth \
     --networkid="$CHAIN_ID" --nodiscover \
     --http --http.addr=0.0.0.0 --http.port=18545 \
     --http.api=eth,net,web3 \
+    --miner.etherbase ${ALLOC_ADDRESS_WITHOUT_0X} \
     --http.corsdomain='*' --http.vhosts='*' &
 
 exec nginx -g "daemon off;"
